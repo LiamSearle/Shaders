@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+
+
+    <script>//need these three for every threejs app
+
+        var scene = new THREE.Scene();
+
+        var camera = new THREE.PerspectiveCamera(
+            75,                                     //fov
+            window.innerWidth/window.innerHeight,   //aspect Ratio
+            0.1,                                    //near plane
+            1000                                    //far plane
+        );
+        camera.position.z = 5;
+
+        var renderer = new THREE.WebGLRenderer({antialias: true});
+
+        renderer.setClearColor("#e5e5e5");
+        renderer.setSize(window.innerWidth,window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth,window.innerHeight);
+            camera.aspect = window.innerWidth/window.innerHeight;
+
+            camera.updateProjectionMatrix();
+        })
+
+        
+
+
+        var geometry = new THREE.BoxGeometry(1, 1, 1); //shape
+        var material = new THREE.MeshLambertMaterial({color: 0xFFCC00});//surface
+        var mesh = new THREE.Mesh(geometry, material);//combine as a mesh
+        scene.add(mesh);
+
+        // mesh.position.set(2,2,-2); // transform the mesh not just the geometry or material
+        
+        // mesh.rotation.set(45,0,0);
+
+        var light = new THREE.PointLight(0xFFFFFF, 1, 500); //set up light
+        light.position.set(10,0,25); //set the position
+
+        scene.add(light);
+
+        var render = function() {
+            requestAnimationFrame(render); // stops the shape from being distorted by resize, renders the image at the frame rate of the monitor, pauses when changing tabs
+
+            // mesh.rotation.x += 0.05;
+            // mesh.rotation.y += 0.05;
+
+             
+            renderer.render(scene, camera);
+
+        }
+
+        render();
+
+
+        this.tl = new TimelineMax().delay(.3);
+        this.tl.to(this.mesh.scale, 1, {x: 2, ease: Expo.easeOut});
+        this.tl.to(this.mesh.scale, .5, {x: .5, ease: Expo.easeOut});
+        this.tl.to(this.mesh.position, .5, {x: 2, ease: Expo.easeOut});
+        this.tl.to(this.mesh.rotation, .5, {y: Math.PI*.5, ease: Expo.easeOut}, "=-1.5");
+
+    </script>
+</body>
+</html>
